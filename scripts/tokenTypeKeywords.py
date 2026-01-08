@@ -21,14 +21,14 @@ content = file_path.read_text()
 
 enum_body = re.search(r"enum\s+class\s+TokenType\s*\{(.*?)\};", content, re.DOTALL).group(1)
 
-keywords_section = re.split(r"//\s*KEYWORDS", enum_body, re.IGNORECASE)
-keywords_section = re.split(r"//\s*OPERATORS", keywords_section[1], re.IGNORECASE)[0]
+keywords_section = re.split(r"//\s*KEYWORDS", enum_body, flags=re.IGNORECASE)
+keywords_section = re.split(r"//\s*OPERATORS", keywords_section[1], flags=re.IGNORECASE)[0]
 
 clean_keywords = re.sub(r"//.*", "", keywords_section)
 tokens = re.findall(r"\b[a-zA-Z_]+\b", clean_keywords)
 
 def indent(s: str = "\t"): return s * indent_level
 
-keywords = [f"{indent()}\"{t.lower()}\"," for t in tokens]
+keywords = [f"{indent()}\"{t.lower()}\"" for t in tokens]
 
-print("\n".join(keywords)[:-1])
+print(",\n".join(keywords))
