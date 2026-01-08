@@ -25,7 +25,7 @@ keywords_section = re.split(r"//\s*KEYWORDS", enum_body, flags=re.IGNORECASE)
 keywords_section = re.split(r"//\s*OPERATORS", keywords_section[1], flags=re.IGNORECASE)[0]
 
 clean_keywords = re.sub(r"//.*", "", keywords_section)
-tokens = re.findall(r"\b[a-zA-Z_]+\b", clean_keywords)
+tokens = sorted(re.findall(r"\b[a-zA-Z_]+\b", clean_keywords))
 
 def indent(s: str = "\t"): return s * indent_level
 
