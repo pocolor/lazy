@@ -1,0 +1,28 @@
+# Dirs
+/bin
+/bin-int
+
+/.cache
+
+# Ides
+/.idea
+/.vscode
+
+# Files
+Makefile
+*.make
+*.lz
+
+compile_commands.json
+
+# Temporary
+/bytecode
+/cli
+/compiler
+/interpreter
+/parser
+/repl
+/runtime
+/sema
+/tests
+/vm
