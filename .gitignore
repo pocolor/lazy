@@ -16,6 +16,7 @@ Makefile
 compile_commands.json
 
 # Temporary
+/ast
 /bytecode
 /cli
 /compiler
