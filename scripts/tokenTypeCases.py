@@ -19,7 +19,7 @@ if not file_path.exists():
 
 content = file_path.read_text()
 
-enum_body = re.search(r"enum\s+class\s+TokenType\s*\{(.*?)\};", content, re.DOTALL).group(1)
+enum_body = re.search(r"enum\s+class\s+TokenType.*?\{(.*?)\};", content, re.DOTALL).group(1)
 clean_body = re.sub(r"//.*", "", enum_body)
 
 tokens = re.findall(r"\b[a-zA-Z_]+\b", clean_body)
