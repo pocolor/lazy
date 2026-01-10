@@ -1,119 +1,128 @@
 #pragma once
 
-#include <string_view>
+#include <cstdint>
 #include <ostream>
+#include <string_view>
 
 namespace Lazy {
-namespace Lexer {
+    enum class TokenType : uint8_t {
+        //////////////
+        // LITERALS //
+        //////////////
+        NUMBER_L,
+        DECIMAL_L,
+        CHAR_L,
+        STRING_L,
+        TRUE_L,
+        FALSE_L,
+        NULL_L,
 
-enum class TokenType {
-    //////////////
-    // LITERALS //
-    //////////////
-    NUMBER,
-    CHAR_L,
-    STRING_L,
-    TRUE_L,
-    FALSE_L,
-    NULL_L,
+        /////////////////
+        // IDENTIFIERS //
+        /////////////////
+        IDENTIFIER,
 
-    /////////////////
-    // IDENTIFIERS //
-    /////////////////
-    IDENTIFIER,
+        //////////////
+        // KEYWORDS //
+        //////////////
+        IF, ELSE, MATCH, WHEN,
+        DO, WHILE, FOR, BREAK, CONTINUE, IN,
 
-    //////////////
-    // KEYWORDS //
-    //////////////
-    IF, ELSE, MATCH, WHEN,
-    DO, WHILE, FOR, BREAK, CONTINUE, IN,
+        THIS, SUPER, DATA, CLASS, OBJECT, INTERFACE, ENUM, ANNOTATION,
+        STATIC, OPEN, ABSTRACT, PERMITS,
 
-    THIS, SUPER, DATA, CLASS, OBJECT, INTERFACE, ENUM, ANNOTATION,
-    STATIC, OPEN, ABSTRACT, PERMITS,
+        ASYNC, AWAIT, EXTERN, INLINE, FN, RETURN, OVERRIDE, YIELD,
 
-    ASYNC, AWAIT, EXTERN, INLINE, FN, RETURN, OVERRIDE, YIELD,
-    ARROW,  // LAMBDA
+        PUBLIC, PROTECTED, SEALED, PRIVATE,
 
-    PUBLIC, PROTECTED, SEALED, PRIVATE,
+        NAMESPACE, IMPORT, FROM, AS,
 
-    NAMESPACE, IMPORT, FROM, AS,
+        TRY, CATCH, FINALLY, THROW, ASSERT,
 
-    TRY, CATCH, FINALLY, THROW, ASSERT,
+        VAR,
+        VAL,
+        BOOLEAN,
+        CHAR,
+        STRING,
+        BYTE,
+        SHORT,
+        INT,
+        LONG,
+        FLOAT,
+        DOUBLE,
+        UNSIGNED,
 
-    VAR,
-    VAL,
-    BOOLEAN,
-    CHAR,
-    STRING,
-    BYTE,
-    SHORT,
-    INT,
-    LONG,
-    FLOAT,
-    DOUBLE,
-    UNSIGNED,
+        TRUE,  // TODO fix duplicated values: true, false, null
+        FALSE,
+        NULL_,
 
-    DELETE,
-    TYPEALIAS,
+        DELETE,
+        TYPEALIAS,
 
-    ///////////////
-    // OPERATORS //
-    ///////////////
-    EQUAL,          DOUBLE_EQUAL,
+        ///////////////
+        // OPERATORS //
+        ///////////////
+        EQUAL, DOUBLE_EQUAL,
+        ARROW,  // lambda
 
-    PLUS,           PLUS_EQUAL,
-    DOUBLE_PLUS,
-    MINUS,          MINUS_EQUAL,
-    DOUBLE_MINUS,
-    STAR,           STAR_EQUAL,
-    DOUBLE_STAR,    DOUBLE_STAR_EQUAL,
-    SLASH,          SLASH_EQUAL,
-    DOUBLE_SLASH,   DOUBLE_SLASH_EQUAL,
-    PERCENT,        PERCENT_EQUAL,
-    AT,             AT_EQUAL,
+        PLUS, PLUS_EQUAL,
+        DOUBLE_PLUS,
+        MINUS, MINUS_EQUAL,
+        DOUBLE_MINUS,
+        STAR, STAR_EQUAL,
+        DOUBLE_STAR, DOUBLE_STAR_EQUAL,
+        SLASH, SLASH_EQUAL,
+        DOUBLE_SLASH, DOUBLE_SLASH_EQUAL,
+        PERCENT, PERCENT_EQUAL,
+        AT, AT_EQUAL,
 
-    EXCLAMATION_MARK,       EXCLAMATION_MARK_EQUAL,
-    GREATER_THAN,           GREATER_THAN_EQUAL,
-    DOUBLE_GREATER_THAN,    DOUBLE_GREATER_THAN_EQUAL,
-    LESS_THAN,              LESS_THAN_EQUAL,
-    DOUBLE_LESS_THAN,       DOUBLE_LESS_THAN_EQUAL,
-    TRIPLE_GREATER_THAN,    TRIPLE_GREATER_THAN_EQUAL,
+        EXCLAMATION_MARK, EXCLAMATION_MARK_EQUAL,
+        GREATER_THAN, GREATER_THAN_EQUAL,
+        DOUBLE_GREATER_THAN, DOUBLE_GREATER_THAN_EQUAL,
+        LESS_THAN, LESS_THAN_EQUAL,
+        DOUBLE_LESS_THAN, DOUBLE_LESS_THAN_EQUAL,
+        TRIPLE_GREATER_THAN, TRIPLE_GREATER_THAN_EQUAL,
 
-    TILDE,          TILDE_EQUAL,
-    AMPERSAND,      AMPERSAND_EQUAL,
-    DOUBLE_AMPERSAND,
-    PIPE,           PIPE_EQUAL,
-    DOUBLE_PIPE,
-    CARET,          CARET_EQUAL,
+        TILDE, TILDE_EQUAL,
+        AMPERSAND, AMPERSAND_EQUAL,
+        DOUBLE_AMPERSAND,
+        PIPE, PIPE_EQUAL,
+        DOUBLE_PIPE,
+        CARET, CARET_EQUAL,
 
-    DOT,
-    COMMA,
-    COLON,
-    SEMICOLON,
-    QUESTION_MARK,
+        DOT,
+        COMMA,
+        COLON,
+        SEMICOLON,
+        QUESTION_MARK,
 
-    EXCLAMATION_DOT,
-    QUESTION_DOT,
-    QUESTION_COLON,
+        EXCLAMATION_DOT,
+        QUESTION_DOT,
+        QUESTION_COLON,
 
-    //////////////
-    // BRACKETS //
-    //////////////
-    LEFT_PAREN, RIGHT_PAREN,  // ()
-    LEFT_BRACE, RIGHT_BRACE,  // {}
-    LEFT_BRACKET, RIGHT_BRACKET,  // []
+        //////////////
+        // BRACKETS //
+        //////////////
+        LEFT_PAREN, RIGHT_PAREN, // ()
+        LEFT_BRACE, RIGHT_BRACE, // {}
+        LEFT_BRACKET, RIGHT_BRACKET, // []
 
-    /////////////
-    // SPECIAL //
-    /////////////
-    END_OF_FILE,
-    UNKNOWN,
-    ERROR,
-    BAD_TOKEN,
-};
+        /////////////
+        // SPECIAL //
+        /////////////
+        END_OF_FILE,
+        UNKNOWN,
+        ERROR,
+        BAD_TOKEN,
+    };
 
-std::string_view tokenTypeStringRepr(const TokenType& tokenType);
-std::ostream& operator<<(std::ostream& os, const TokenType& tokenType);
+    struct Token {
+        TokenType type = TokenType::END_OF_FILE;
+        std::string_view text;
+        uint32_t line = 0, column = 0;
+    };
 
-}
+    std::string_view tokenTypeToString(const TokenType &tokenType);
+    std::ostream &operator<<(std::ostream &os, const TokenType &tokenType);
+    std::ostream &operator<<(std::ostream &os, const Token &token);
 }

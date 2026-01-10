@@ -1,10 +1,21 @@
 #include "token.h"
 
-using namespace Lazy::Lexer;
+using namespace Lazy;
 
-std::string_view Lazy::Lexer::tokenTypeStringRepr(const TokenType& tokenType) {
+std::ostream &Lazy::operator<<(std::ostream &os, const TokenType &tokenType) {
+    os << tokenTypeToString(tokenType);
+    return os;
+}
+
+std::ostream &Lazy::operator<<(std::ostream &os, const Token &token) {
+    os << token.type << " " << token.line << ":" << token.column << " len" << token.text.length() <<  " " << token.text;
+    return os;
+}
+
+std::string_view Lazy::tokenTypeToString(const TokenType &tokenType) {
     switch (tokenType) {
-        case TokenType::NUMBER: return "Number";
+        case TokenType::NUMBER_L: return "NumberL";
+        case TokenType::DECIMAL_L: return "DecimalL";
         case TokenType::CHAR_L: return "CharL";
         case TokenType::STRING_L: return "StringL";
         case TokenType::TRUE_L: return "TrueL";
@@ -67,6 +78,9 @@ std::string_view Lazy::Lexer::tokenTypeStringRepr(const TokenType& tokenType) {
         case TokenType::FLOAT: return "Float";
         case TokenType::DOUBLE: return "Double";
         case TokenType::UNSIGNED: return "Unsigned";
+        case TokenType::TRUE: return "True";
+        case TokenType::FALSE: return "False";
+        case TokenType::NULL_: return "Null";
         case TokenType::DELETE: return "Delete";
         case TokenType::TYPEALIAS: return "Typealias";
         case TokenType::EQUAL: return "Equal";
@@ -131,9 +145,4 @@ std::string_view Lazy::Lexer::tokenTypeStringRepr(const TokenType& tokenType) {
         case TokenType::BAD_TOKEN: return "BadToken";
         default: return "<UnknownTokenType>";
     }
-}
-        
-std::ostream& Lazy::Lexer::operator<<(std::ostream& os, const TokenType& tokenType) {
-    os << tokenTypeStringRepr(tokenType);
-    return os;
 }
