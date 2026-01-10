@@ -25,6 +25,6 @@ group "Execution"
 	include "vm"
 
 group "Tools"
-	include "cli"
-	--include "repl"
+	--include "cli"
+	include "repl"
 	--include "compiler"
